@@ -373,4 +373,11 @@ a:visited {
 .login__card__info__buttons .login__card__info__buttons__button:last-child:hover {
   background-color: #121212;
   color: #fff;
+}
+
+.login__error {
+  color: red;
+  min-height: 20px;
+  font-size: 12px;
+  margin-top: 5px;
 }/*# sourceMappingURL=style.css.map */

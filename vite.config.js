@@ -5,9 +5,9 @@ import svgr from "vite-plugin-svgr";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), svgr()],
-  base: "/ClientSpring/", // Указываем базовый путь
+  base: "/ClientSpring/",
   build: {
-    outDir: "dist", // По умолчанию директория сборки
+    outDir: "dist",
   },
   server: {
     proxy: {
