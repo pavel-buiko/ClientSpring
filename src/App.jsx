@@ -16,7 +16,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetch("https://server-ancient-grass-9030.fly.dev//api/test")
+    fetch("https://server-ancient-grass-9030.fly.dev/api/test")
       .then((value) => value.json())
       .then((data) => console.log(data.message))
       .catch((message) => {
@@ -34,7 +34,7 @@ function App() {
   }, [dispatch]);
 
   return (
-    <BrowserRouter basename="/reactSpringCopy/">
+    <BrowserRouter basename="/ClientSpring/">
       <Routes>
         <Route
           path="/"
