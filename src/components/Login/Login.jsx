@@ -9,17 +9,21 @@ import { loginThunk } from "../../store/actions/actions";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState({ error: "" });
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError({ error: "" });
+
     const result = await dispatch(loginThunk(username, password));
 
     if (result.success) {
       navigate("/");
     } else {
-      alert("Login error: " + result.message);
+      setError({ error: result.message });
     }
   };
 
@@ -50,6 +54,7 @@ export default function Login() {
               placeholder="Enter your password"
               onChange={(e) => setPassword(e.target.value)}
             />
+            <span className="login__error">{error.error}</span>
           </div>
           <div className="login__card__info__buttons">
             <LoginButton label="Submit" />

@@ -1,4 +1,9 @@
-import { login, logout, searchTerm as searchType } from "./types";
+import {
+  login,
+  logout,
+  searchTerm as search,
+  loginError as logErr,
+} from "./types";
 
 export const loginThunk = (username, password) => async (dispatch) => {
   try {
@@ -28,7 +33,7 @@ export const loginThunk = (username, password) => async (dispatch) => {
 
 export const setSearchTerm = (searchTerm) => {
   return {
-    type: searchType,
+    type: search,
     value: searchTerm,
   };
 };
@@ -41,7 +46,7 @@ export const logoutAction = () => {
 
 export const loginError = (message) => {
   return {
-    type: loginError,
+    type: logErr,
     value: message,
   };
 };

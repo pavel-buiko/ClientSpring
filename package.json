@@ -1,9 +1,9 @@
 {
-  "name": "reactspringcopy",
+  "name": "reactspringcopyclient",
   "private": true,
   "version": "0.0.0",
-  "proxy": "http://localhost:5000",
   "type": "module",
+  "homepage": "https://pavel-buiko.github.io/ClientSpring/",
   "jest": {
     "transform": {
       "^.+.(js|jsx)$": "babel-jest"
@@ -22,12 +22,14 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
+    "postbuild": "cp dist/index.html dist/404.html",
     "deploy": "gh-pages -d dist",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
     "gh-pages": "^6.1.1",
+    "ghspa": "^1.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
