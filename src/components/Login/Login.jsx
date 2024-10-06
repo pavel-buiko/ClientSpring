@@ -27,6 +27,11 @@ export default function Login() {
     }
   };
 
+  const handleSignupRedirect = (e) => {
+    e.preventDefault();
+    navigate("/signup");
+  };
+
   return (
     <div className="login">
       <div className="login__header">
@@ -57,8 +62,12 @@ export default function Login() {
             <span className="login__error">{error.error}</span>
           </div>
           <div className="login__card__info__buttons">
-            <LoginButton label="Submit" />
-            <LoginButton label="Continue with Google" />
+            <LoginButton type="submit" label="Submit" />
+            <LoginButton
+              type="button"
+              label="Create an account"
+              onClick={handleSignupRedirect}
+            />
           </div>
         </form>
       </div>

@@ -7,14 +7,11 @@ import {
 
 export const loginThunk = (username, password) => async (dispatch) => {
   try {
-    const response = await fetch(
-      "https://server-ancient-grass-9030.fly.dev/api/login",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      }
-    );
+    const response = await fetch("http://localhost:5000/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
 
     const data = await response.json();
     if (response.ok) {
@@ -62,7 +59,7 @@ export const fetchSearchItems = (searchTerm) => {
   return async (dispatch) => {
     try {
       const response = await fetch(
-        `https://server-ancient-grass-9030.fly.dev/api/cards?search=${searchTerm}`
+        `http://localhost:5000/api/cards?search=${searchTerm}`
       );
       const data = await response.json();
       dispatch({
@@ -70,7 +67,22 @@ export const fetchSearchItems = (searchTerm) => {
         value: data,
       });
     } catch (error) {
-      alert("Happend error: \n", error);
+      console.log("Happened error: \n", error);
+    }
+  };
+};
+
+export const fetchAllItems = () => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/cards`);
+      const data = await response.json();
+      dispatch({
+        type: "set_filtered_objects",
+        value: data,
+      });
+    } catch (error) {
+      console.log("Happened error: \n" + error);
     }
   };
 };

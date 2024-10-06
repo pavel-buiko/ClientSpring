@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSearchItems } from "../../store/actions/actions";
 import { useEffect, useState } from "react";

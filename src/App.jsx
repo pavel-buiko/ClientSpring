@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { logoutAction } from "./store/actions/actions";
 import { loginThunk } from "./store/actions/actions";
+import Signup from "./components/Login/Signup";
+import { fetchAllItems } from "./store/actions/actions";
 
 const PrivateRoute = ({ children }) => {
   const { isAuth } = useSelector((state) => state.user);
@@ -14,6 +16,10 @@ const PrivateRoute = ({ children }) => {
 
 function App() {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchAllItems());
+  }, [dispatch]);
 
   useEffect(() => {
     fetch("https://server-ancient-grass-9030.fly.dev/api/test")
@@ -47,6 +53,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>

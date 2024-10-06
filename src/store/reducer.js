@@ -1,4 +1,3 @@
-import projectItems from "../../../server/projectItems";
 import {
   login,
   logout,
@@ -6,18 +5,18 @@ import {
   searchTerm,
   setFiltered,
 } from "./actions/types";
+
 const defaultState = {
   searchTerm: "",
-  filteredObjects: projectItems,
+  filteredObjects: [],
 };
 
 export const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case searchTerm:
       return { ...state, searchTerm: action.value };
-    case setFiltered: {
+    case setFiltered:
       return { ...state, filteredObjects: action.value };
-    }
     default:
       return state;
   }
