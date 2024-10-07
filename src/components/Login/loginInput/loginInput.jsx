@@ -7,11 +7,13 @@ export default function LoginInput({
   name,
   placeholder,
   autoComplete,
+  min,
 }) {
   return (
     <input
       type={type}
       value={value}
+      min={min}
       name={name}
       onChange={onChange}
       placeholder={placeholder}
@@ -28,4 +30,5 @@ LoginInput.propTypes = {
   placeholder: PropTypes.string,
   autoComplete: PropTypes.string,
   name: PropTypes.string,
+  min: PropTypes.number,
 };
