@@ -35,13 +35,16 @@ export const refreshAccessToken = async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/api/token`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ refreshToken }),
-    });
+    const response = await fetch(
+      `https://server-ancient-grass-9030.fly.dev/api/token`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ refreshToken }),
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();

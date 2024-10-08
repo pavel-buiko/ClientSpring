@@ -26,18 +26,21 @@ export default function Signup() {
     setErrors({});
 
     try {
-      const response = await fetch("http://localhost:5000/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          username,
-          password,
-          confirmPassword,
-          age,
-        }),
-      });
+      const response = await fetch(
+        "https://server-ancient-grass-9030.fly.dev/api/signup",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            username,
+            password,
+            confirmPassword,
+            age,
+          }),
+        }
+      );
 
       const data = await response.json();
 

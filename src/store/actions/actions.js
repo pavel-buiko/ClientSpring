@@ -9,11 +9,14 @@ import { fetchWithAuth } from "../../components/jwtFunctions";
 
 export const loginThunk = (username, password) => async (dispatch) => {
   try {
-    const response = await fetchWithAuth("http://localhost:5000/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
+    const response = await fetchWithAuth(
+      "https://server-ancient-grass-9030.fly.dev/api/login",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      }
+    );
 
     const data = await response.json();
     if (response.ok) {
@@ -68,7 +71,7 @@ export const fetchSearchItems = (searchTerm) => {
       const accessToken = localStorage.getItem("accessToken");
 
       const response = await fetch(
-        `http://localhost:5000/api/cards?search=${encodeURIComponent(searchTerm)}`,
+        `https://server-ancient-grass-9030.fly.dev/api/cards?search=${encodeURIComponent(searchTerm)}`,
         {
           method: "GET",
           headers: {
@@ -81,7 +84,7 @@ export const fetchSearchItems = (searchTerm) => {
         const newAccessToken = await refreshAccessToken();
         if (newAccessToken) {
           const retryResponse = await fetch(
-            `http://localhost:5000/api/cards?search=${encodeURIComponent(searchTerm)}`,
+            `https://server-ancient-grass-9030.fly.dev/api/cards?search=${encodeURIComponent(searchTerm)}`,
             {
               method: "GET",
               headers: {
@@ -115,22 +118,28 @@ export const fetchAllItems = () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
 
-      const response = await fetch(`http://localhost:5000/api/cards`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetch(
+        `https://server-ancient-grass-9030.fly.dev/api/cards`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       if (response.status === 401) {
         const newAccessToken = await refreshAccessToken();
         if (newAccessToken) {
-          const retryResponse = await fetch(`http://localhost:5000/api/cards`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${newAccessToken}`,
-            },
-          });
+          const retryResponse = await fetch(
+            `https://server-ancient-grass-9030.fly.dev/api/cards`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${newAccessToken}`,
+              },
+            }
+          );
           const data = await retryResponse.json();
           dispatch({
             type: "set_filtered_objects",
