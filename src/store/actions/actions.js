@@ -4,10 +4,12 @@ import {
   searchTerm as search,
   loginError as logErr,
 } from "./types";
+import { refreshAccessToken } from "../../components/jwtFunctions";
+import { fetchWithAuth } from "../../components/jwtFunctions";
 
 export const loginThunk = (username, password) => async (dispatch) => {
   try {
-    const response = await fetch("http://localhost:5000/api/login", {
+    const response = await fetchWithAuth("http://localhost:5000/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -15,8 +17,13 @@ export const loginThunk = (username, password) => async (dispatch) => {
 
     const data = await response.json();
     if (response.ok) {
-      dispatch(loginAction(data));
-      localStorage.setItem("user", JSON.stringify(data));
+      const { accessToken, refreshToken, user } = data;
+
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      dispatch(loginAction(user));
       return { success: true };
     } else {
       dispatch(loginError(data.message));
@@ -27,11 +34,10 @@ export const loginThunk = (username, password) => async (dispatch) => {
     return { success: false, message: error.toString() };
   }
 };
-
 export const setSearchTerm = (searchTerm) => {
   return {
     type: search,
-    value: searchTerm,
+    payload: searchTerm,
   };
 };
 
@@ -44,30 +50,62 @@ export const logoutAction = () => {
 export const loginError = (message) => {
   return {
     type: logErr,
-    value: message,
+    payload: message,
   };
 };
 
 export const loginAction = (user) => {
   return {
     type: login,
-    value: user,
+    payload: user,
   };
 };
 
+//That hurts me so bad
 export const fetchSearchItems = (searchTerm) => {
   return async (dispatch) => {
     try {
+      const accessToken = localStorage.getItem("accessToken");
+
       const response = await fetch(
-        `http://localhost:5000/api/cards?search=${searchTerm}`
+        `http://localhost:5000/api/cards?search=${encodeURIComponent(searchTerm)}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
-      const data = await response.json();
-      dispatch({
-        type: "set_filtered_objects",
-        value: data,
-      });
+
+      if (response.status === 401) {
+        const newAccessToken = await refreshAccessToken();
+        if (newAccessToken) {
+          const retryResponse = await fetch(
+            `http://localhost:5000/api/cards?search=${encodeURIComponent(searchTerm)}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${newAccessToken}`,
+              },
+            }
+          );
+          const data = await retryResponse.json();
+          dispatch({
+            type: "set_filtered_objects",
+            payload: data,
+          });
+        } else {
+          dispatch(logoutAction());
+        }
+      } else {
+        const data = await response.json();
+        dispatch({
+          type: "set_filtered_objects",
+          payload: data,
+        });
+      }
     } catch (error) {
-      console.log("Happened error: \n", error);
+      console.log("An error occurred: \n", error);
     }
   };
 };
@@ -75,14 +113,41 @@ export const fetchSearchItems = (searchTerm) => {
 export const fetchAllItems = () => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/cards`);
-      const data = await response.json();
-      dispatch({
-        type: "set_filtered_objects",
-        value: data,
+      const accessToken = localStorage.getItem("accessToken");
+
+      const response = await fetch(`http://localhost:5000/api/cards`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
+
+      if (response.status === 401) {
+        const newAccessToken = await refreshAccessToken();
+        if (newAccessToken) {
+          const retryResponse = await fetch(`http://localhost:5000/api/cards`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${newAccessToken}`,
+            },
+          });
+          const data = await retryResponse.json();
+          dispatch({
+            type: "set_filtered_objects",
+            payload: data,
+          });
+        } else {
+          dispatch(logoutAction());
+        }
+      } else {
+        const data = await response.json();
+        dispatch({
+          type: "set_filtered_objects",
+          payload: data,
+        });
+      }
     } catch (error) {
-      console.log("Happened error: \n" + error);
+      console.log("An error occurred: \n", error);
     }
   };
 };

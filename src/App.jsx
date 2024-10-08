@@ -5,7 +5,7 @@ import Login from "./components/Login/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { logoutAction } from "./store/actions/actions";
-import { loginThunk } from "./store/actions/actions";
+import { loginThunk, loginAction } from "./store/actions/actions";
 import Signup from "./components/Login/Signup";
 import { fetchAllItems } from "./store/actions/actions";
 
@@ -16,6 +16,13 @@ const PrivateRoute = ({ children }) => {
 
 function App() {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      dispatch(loginAction(user));
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchAllItems());

@@ -10,7 +10,7 @@ export default function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [age, setAge] = useState("");
+  const [age, setAge] = useState("18");
 
   //for possible client input errors
   const [errors, setErrors] = useState({});
@@ -20,62 +20,9 @@ export default function Signup() {
 
   const navigate = useNavigate();
 
-  const validateFields = () => {
-    const errors = {};
-
-    if (!firstName.trim()) {
-      errors.firstName = "Имя обязательно для заполнения";
-    }
-
-    if (!lastName.trim()) {
-      errors.lastName = "Фамилия обязательна для заполнения";
-    }
-
-    if (!username.trim()) {
-      errors.username = "Имя пользователя обязательно для заполнения";
-    }
-
-    if (!password) {
-      errors.password = "Пароль обязателен для заполнения";
-    }
-
-    if (!confirmPassword) {
-      errors.confirmPassword = "Подтвердите пароль";
-    }
-
-    if (password && confirmPassword && password !== confirmPassword) {
-      errors.confirmPassword = "Пароли не совпадают";
-    }
-
-    if (!password) {
-      errors.password = "Пароль обязателен для заполнения";
-    } else if (password.length < 4) {
-      errors.password = "Пароль должен содержать не менее 4 символов";
-    }
-    if (!age) {
-      errors.age = "Укажите ваш возраст";
-    } else {
-      const ageNumber = Number(age);
-
-      if (isNaN(ageNumber)) {
-        errors.age = "Возраст должен быть числом";
-      } else if (ageNumber < 18 || ageNumber > 100) {
-        errors.age = "Возраст должен быть между 18 и 100 годами";
-      }
-    }
-
-    return errors;
-  };
-
   const handleSignup = async (e) => {
     e.preventDefault();
     setSignupError("");
-
-    const validationErrors = validateFields();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
     setErrors({});
 
     try {
@@ -87,6 +34,7 @@ export default function Signup() {
           lastName,
           username,
           password,
+          confirmPassword,
           age,
         }),
       });
@@ -96,12 +44,14 @@ export default function Signup() {
       if (response.ok) {
         alert(data.message);
         navigate("/login");
+      } else if (response.status === 400 && data.errors) {
+        setErrors(data.errors);
       } else {
-        setSignupError(data.message || "Ошибка при регистрации.");
+        setSignupError(data.message || "Registration error.");
       }
     } catch (error) {
-      console.error("Ошибка при регистрации:", error);
-      setSignupError("Произошла ошибка при регистрации.");
+      console.error("registration error:", error);
+      setSignupError("Registration error happend.");
     }
   };
 
@@ -119,11 +69,9 @@ export default function Signup() {
         <div className="signup__wrapper">
           <div className="signup__wrapper__details">
             <p className="signup__wrapper__details__sentence">
-              Пожалуйста, создайте аккаунт
+              Please, create an account
             </p>
-            <h4 className="signup__wrapper__details__title">
-              Добро пожаловать
-            </h4>
+            <h4 className="signup__wrapper__details__title">Welcome</h4>
           </div>
 
           <div className="signup__wrapper__info">
@@ -133,7 +81,7 @@ export default function Signup() {
                   type="text"
                   name="firstname"
                   value={firstName}
-                  placeholder="Имя"
+                  placeholder="First Name"
                   onChange={(e) => setFirstName(e.target.value)}
                   autoComplete="given-name"
                 />
@@ -145,7 +93,7 @@ export default function Signup() {
                   type="text"
                   name="secondname"
                   value={lastName}
-                  placeholder="Фамилия"
+                  placeholder="Secondary Name"
                   onChange={(e) => setLastName(e.target.value)}
                   autoComplete="family-name"
                 />
@@ -157,7 +105,7 @@ export default function Signup() {
                   type="text"
                   name="username"
                   value={username}
-                  placeholder="Имя пользователя"
+                  placeholder="User Name"
                   onChange={(e) => setUsername(e.target.value)}
                 />
                 {errors.username && (
@@ -168,7 +116,7 @@ export default function Signup() {
                   type="password"
                   name="password"
                   value={password}
-                  placeholder="Пароль"
+                  placeholder="Password"
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 {errors.password && (
@@ -179,7 +127,7 @@ export default function Signup() {
                   name="confirmPassword"
                   type="password"
                   value={confirmPassword}
-                  placeholder="Подтвердите пароль"
+                  placeholder="Confirm password"
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 {errors.confirmPassword && (
@@ -191,7 +139,7 @@ export default function Signup() {
                   type="number"
                   value={age}
                   min={18}
-                  placeholder="Введите ваш возраст"
+                  placeholder="Enter your age"
                   onChange={(e) => setAge(e.target.value)}
                 />
                 {errors.age && (
@@ -204,10 +152,10 @@ export default function Signup() {
               </div>
 
               <div className="signup__wrapper__buttons">
-                <LoginButton type="submit" label="Создать аккаунт" />
+                <LoginButton type="submit" label="Create an account" />
                 <LoginButton
                   type="button"
-                  label="Назад к входу"
+                  label="Back to login"
                   onClick={handleLoginRedirect}
                 />
               </div>
