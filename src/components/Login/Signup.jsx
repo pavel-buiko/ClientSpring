@@ -12,7 +12,7 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [age, setAge] = useState("18");
 
-  //F or possible client input errors
+  // For possible client input errors
   const [errors, setErrors] = useState({});
 
   // For possible server errors
