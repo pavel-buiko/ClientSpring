@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 
 export default function Cards() {
   const { filteredObjects } = useSelector((state) => state.search);
+  console.log(filteredObjects);
   return (
     <div className="main__cards__container">
       {filteredObjects.map((arrayItem) => (

@@ -4,7 +4,7 @@ export const fetchWithAuth = async (url, options = {}) => {
     ...options,
     headers: {
       ...options.headers,
-      Authorization: `Bearer ${accessToken}`,
+      authorization: `Bearer ${accessToken}`,
     },
   });
 
@@ -30,7 +30,9 @@ export const fetchWithAuth = async (url, options = {}) => {
 export const refreshAccessToken = async () => {
   console.log("Refresh Access Token start");
   const refreshToken = localStorage.getItem("refreshToken");
+  console.log("Retrieved Refresh Token:", refreshToken);
   if (!refreshToken) {
+    console.log("Refresh token not found");
     return null;
   }
 

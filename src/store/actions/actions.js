@@ -5,11 +5,10 @@ import {
   loginError as logErr,
 } from "./types";
 import { refreshAccessToken } from "../../components/jwtFunctions";
-import { fetchWithAuth } from "../../components/jwtFunctions";
 
 export const loginThunk = (username, password) => async (dispatch) => {
   try {
-    const response = await fetchWithAuth(
+    const response = await fetch(
       "https://server-ancient-grass-9030.fly.dev/api/login",
       {
         method: "POST",
@@ -21,6 +20,9 @@ export const loginThunk = (username, password) => async (dispatch) => {
     const data = await response.json();
     if (response.ok) {
       const { accessToken, refreshToken, user } = data;
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user");
 
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
@@ -37,6 +39,7 @@ export const loginThunk = (username, password) => async (dispatch) => {
     return { success: false, message: error.toString() };
   }
 };
+
 export const setSearchTerm = (searchTerm) => {
   return {
     type: search,
@@ -63,100 +66,61 @@ export const loginAction = (user) => {
     payload: user,
   };
 };
-
-//That hurts me so bad
+// Looks good. I'm kinda proud of myself(a little)
 export const fetchSearchItems = (searchTerm) => {
-  return async (dispatch) => {
-    try {
-      const accessToken = localStorage.getItem("accessToken");
-
-      const response = await fetch(
-        `https://server-ancient-grass-9030.fly.dev/api/cards?search=${encodeURIComponent(searchTerm)}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      if (response.status === 401) {
-        const newAccessToken = await refreshAccessToken();
-        if (newAccessToken) {
-          const retryResponse = await fetch(
-            `https://server-ancient-grass-9030.fly.dev/api/cards?search=${encodeURIComponent(searchTerm)}`,
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${newAccessToken}`,
-              },
-            }
-          );
-          const data = await retryResponse.json();
-          dispatch({
-            type: "set_filtered_objects",
-            payload: data,
-          });
-        } else {
-          dispatch(logoutAction());
-        }
-      } else {
-        const data = await response.json();
-        dispatch({
-          type: "set_filtered_objects",
-          payload: data,
-        });
-      }
-    } catch (error) {
-      console.log("An error occurred: \n", error);
-    }
+  return (dispatch) => {
+    dispatch(fetchItems(searchTerm));
   };
 };
 
 export const fetchAllItems = () => {
+  return (dispatch) => {
+    dispatch(fetchItems());
+  };
+};
+export const fetchItems = (searchTerm = "") => {
   return async (dispatch) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
+      let url = `https://server-ancient-grass-9030.fly.dev/api/cards`;
 
-      const response = await fetch(
-        `https://server-ancient-grass-9030.fly.dev/api/cards`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      if (searchTerm) {
+        url += `?search=${encodeURIComponent(searchTerm)}`;
+      }
 
-      if (response.status === 401) {
+      let response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.status === 401 || response.status === 403) {
         const newAccessToken = await refreshAccessToken();
         if (newAccessToken) {
-          const retryResponse = await fetch(
-            `https://server-ancient-grass-9030.fly.dev/api/cards`,
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${newAccessToken}`,
-              },
-            }
-          );
-          const data = await retryResponse.json();
-          dispatch({
-            type: "set_filtered_objects",
-            payload: data,
+          response = await fetch(url, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${newAccessToken}`,
+            },
           });
         } else {
           dispatch(logoutAction());
+          return;
         }
-      } else {
+      }
+
+      if (response.ok) {
         const data = await response.json();
         dispatch({
           type: "set_filtered_objects",
           payload: data,
         });
+      } else {
+        const errorData = await response.json();
+        console.error("Error data fetching:", errorData.message);
       }
     } catch (error) {
-      console.log("An error occurred: \n", error);
+      console.log("Happened error: \n", error);
     }
   };
 };
