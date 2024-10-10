@@ -1,8 +1,12 @@
 import PropTypes from "prop-types";
 
-export default function LoginButton({ onClick, label }) {
+export default function LoginButton({ onClick, label, type }) {
   return (
-    <button onClick={onClick} className="login__card__info__buttons__button">
+    <button
+      onClick={onClick}
+      type={type}
+      className="login__card__info__buttons__button"
+    >
       {label}
     </button>
   );
@@ -11,4 +15,5 @@ export default function LoginButton({ onClick, label }) {
 LoginButton.propTypes = {
   onClick: PropTypes.func,
   label: PropTypes.string.isRequired,
+  type: PropTypes.string,
 };

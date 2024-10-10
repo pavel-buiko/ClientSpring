@@ -22,12 +22,13 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "postbuild": "cp dist/index.html dist/404.html",
+    "postbuild": "copy dist\\index.html dist\\404.html",
     "deploy": "gh-pages -d dist",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
+    "axios": "^1.7.7",
     "gh-pages": "^6.1.1",
     "ghspa": "^1.0.0",
     "jest-environment-jsdom": "^29.7.0",

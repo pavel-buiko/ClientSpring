@@ -378,28 +378,29 @@ a {
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        .login__card__info__buttons__button {
-          padding: 0.75rem;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          font-size: 16px;
-          background-color: $primary-color;
-          color: #fff;
-          transition: background-color 0.3s ease;
-
-          &:last-child {
-            background-color: #fff;
-            color: $primary-color;
-            border: 2px solid $primary-color;
-
-            &:hover {
-              background-color: $primary-color;
-              color: #fff;
-            }
-          }
-        }
       }
+    }
+  }
+}
+
+.login__card__info__buttons__button {
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  background-color: $primary-color;
+  color: #fff;
+  transition: background-color 0.3s ease;
+
+  &:last-child {
+    background-color: #fff;
+    color: $primary-color;
+    border: 2px solid $primary-color;
+
+    &:hover {
+      background-color: $primary-color;
+      color: #fff;
     }
   }
 }
@@ -409,4 +410,54 @@ a {
   min-height: 20px;
   font-size: 12px;
   margin-top: 5px;
+}
+
+// Signip stylesheets
+
+.signup {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  &__header {
+    width: 100%;
+    padding: 15px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &__wrapper {
+    border-radius: 10px;
+    padding: 1rem;
+    width: 300px;
+    box-shadow: 0px 0px 15px rgb(215, 215, 215);
+    &__details {
+      padding: 0.2rem 0 2rem 0;
+      &__sentence {
+        color: #616161;
+        font-size: 12px;
+      }
+
+      &__title {
+        margin: 0px;
+        font-size: 28px;
+      }
+    }
+
+    &__inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    &__buttons {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
 }
