@@ -20,10 +20,6 @@ export const loginThunk = (username, password) => async (dispatch) => {
     const data = await response.json();
     if (response.ok) {
       const { accessToken, refreshToken, user } = data;
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("user");
-
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("user", JSON.stringify(user));
