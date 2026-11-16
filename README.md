@@ -1,8 +1,14 @@
-# React + Vite
+# ClientSpring
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A deployment-oriented React client for the Spring Projects catalogue with search, responsive navigation, and a sign-in page. The project uses React, Redux, React Router, Vite, and Sass. It is configured with the `/ClientSpring/` base path for GitHub Pages.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```sh
+npm ci
+npm run dev
+```
+
+Open the Vite URL under `/ClientSpring/`. The client uses a hosted API configured in [actions.js](src/store/actions/actions.js). For local development against a local API, use [reactSpringCopyClient](https://github.com/pavel-buiko/reactSpringCopyClient) and [reactSpringCopyServer](https://github.com/pavel-buiko/reactSpringCopyServer).
+
+Run `npm test` for the Jest suite.
