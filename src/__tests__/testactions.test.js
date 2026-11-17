@@ -1,5 +1,5 @@
 import { thunk } from "redux-thunk";
-import { loginThunk, loginAction, loginError } from "../actions";
+import { loginThunk, loginAction, loginError } from "../store/actions/actions";
 import { jest } from "@jest/globals";
 import * as mockStoreModule from "redux-mock-store";
 
